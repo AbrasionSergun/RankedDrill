@@ -42,4 +42,16 @@ function submitMove(){if(state.ended)return;if(state.turn==='me'){if(!state.sele
 function opponentTurn(){if(state.ended)return;let pass=Math.random()>.48;if(!pass)state.mine++;render();if(state.mine>=5){finish(false);return}$('#resultText').textContent=pass?'You landed the move! No letter.':'You missed it and received '+('DRILL'[state.mine-1]||'a letter')+'.';state.turn='me';$('#turnLabel').textContent='YOUR TURN TO SET';$('#challengeTitle').textContent='Choose a drill move';$('#challengeText').textContent='Choose the next challenge for your opponent.';$('#submitMove').style.display='inline-flex';$('#opponentTurn').style.display='none';}
 $('#playNow').onclick=()=>startGame(false);$('#practiceNow').onclick=()=>startGame(true);$('#liveMode').onclick=()=>toast('Live calls will be added during multiplayer setup.');$('#asyncMode').onclick=()=>toast('Async DMs will be added during multiplayer setup.');$('#backHome').onclick=()=>showPage('home');$('#seeRanks').onclick=()=>showPage('rankings');$('#rankBack').onclick=()=>showPage('home');$$('.nav button').forEach(b=>b.onclick=()=>b.dataset.page==='game'?startGame(false):showPage(b.dataset.page));$$('.move').forEach(b=>b.onclick=()=>{if(state.turn!=='me'||state.ended)return;state.selected=b.dataset.move;$$('.move').forEach(x=>x.classList.toggle('selected',x===b));if(state.selected==='Custom move'){let name=prompt('Enter a move name:');if(name&&name.trim()){state.selected=name.trim().slice(0,50);b.textContent=state.selected;toast('Custom move selected')}else{state.selected='Basic wrist roll';}}});$('#submitMove').onclick=submitMove;$('#opponentTurn').onclick=opponentTurn;$('#resetGame').onclick=()=>startGame(state.practice);$('#topName').parentElement.onclick=()=>{$('#nameInput').value=state.name;$('#nameModal').classList.add('show')};$('#cancelName').onclick=()=>$('#nameModal').classList.remove('show');$('#saveName').onclick=()=>{let n=$('#nameInput').value.trim();if(!n){toast('Enter a callsign');return}state.name=n;$('#nameModal').classList.remove('show');render();toast('Callsign updated')};$('#nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('#saveName').click()});render();
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://yfvlwycyabojubkzxtsq.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_sYJBrE6zEB-jlSyuSlB9LA_ItXxODSp';
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  console.log('RankedDrill connected to Supabase!');
+</script>
 </body></html>
